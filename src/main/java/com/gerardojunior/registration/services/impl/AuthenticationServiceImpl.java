@@ -7,6 +7,7 @@ import com.gerardojunior.registration.dto.AuthenticationResponse;
 import com.gerardojunior.registration.entity.meta.Token;
 import com.gerardojunior.registration.entity.meta.User;
 import com.gerardojunior.registration.enums.TokenType;
+import com.gerardojunior.registration.exception.NotFoundException;
 import com.gerardojunior.registration.repositories.TokenRepository;
 import com.gerardojunior.registration.repositories.UserRepository;
 import com.gerardojunior.registration.services.AuthenticationService;
@@ -16,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -41,7 +41,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         );
 
         User user = repository.findByEmail(request.getEmail())
-                              .orElseThrow();
+                              .orElseThrow(() -> new NotFoundException("UserNotFound", "User not found"));
 
         String jwtToken = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);

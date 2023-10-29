@@ -25,9 +25,9 @@ public class AuthenticationResource {
 
     private final AuthenticationService service;
 
-    @PostMapping("/authenticate")
+    @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
-        return new ResponseEntity(new StandardResponse("200", "Done", service.authenticate(request)), HttpStatus.OK);
+        return new ResponseEntity(new StandardResponse("AuthSuccessfully", "Authentication completed successfully", service.authenticate(request)), HttpStatus.OK);
     }
 
     @PostMapping("/refresh-token")

@@ -28,23 +28,24 @@ public class UserResource {
                     @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
                     @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @GetMapping
-    public ResponseEntity<String> list() {
+    public ResponseEntity list() {
         return new ResponseEntity(new StandardResponse("200", "Done", "Hello from secured endpoint"), HttpStatus.OK);
     }
 
     @GetMapping("/{document}")
     public ResponseEntity details(@PathVariable String document) {
-        return new ResponseEntity(new StandardResponse("200", "Done", service.find(document)), HttpStatus.OK);
+        return new ResponseEntity(new StandardResponse("UserFound", "User found successfully", service.find(document)), HttpStatus.OK);
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity create(@RequestBody @Valid RegisterRequest request) {
-        return new ResponseEntity(new StandardResponse("201", "Done", service.register(request)), HttpStatus.CREATED);
+        return new ResponseEntity(new StandardResponse("UserCreated", "User created successfully", service.register(request)), HttpStatus.CREATED);
     }
 
     @PutMapping("/{document}")
-    public ResponseEntity<String> update(@PathVariable String document, @RequestBody @Valid UpdateRequest request) {
-        return new ResponseEntity(new StandardResponse("200", "Done", service.update(document, request)), HttpStatus.OK);
+    public ResponseEntity update(@PathVariable String document,
+                                 @RequestBody @Valid UpdateRequest request) {
+        return new ResponseEntity(new StandardResponse("UserUpdated", "User updated successfully", service.update(document, request)), HttpStatus.OK);
     }
 
 }

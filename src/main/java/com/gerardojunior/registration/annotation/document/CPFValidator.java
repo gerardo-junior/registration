@@ -1,11 +1,11 @@
-package com.gerardojunior.registration.commons.annotation;
+package com.gerardojunior.registration.annotation.document;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 import java.util.Objects;
 
-public class DocumentValidator implements ConstraintValidator<Document, String> {
+public class CPFValidator implements ConstraintValidator<CPF, String> {
 
     @Override
     public boolean isValid(String cpf, ConstraintValidatorContext context) {
@@ -16,10 +16,10 @@ public class DocumentValidator implements ConstraintValidator<Document, String> 
         int d1, d2, digit1, digit2, mod, digitCPF;
         String nVerifyingDigit;
 
-        d1 = d2 = digit1 = digit2 = mod = 0;
+        d1 = d2 = 0;
 
         for (int i = 1; i < cpf.length() - 1; i++) {
-            digitCPF = Integer.valueOf(cpf.substring(i - 1, i)).intValue();
+            digitCPF = Integer.parseInt(cpf.substring(i - 1, i));
 
             d1 = d1 + (11 - i) * digitCPF;
             d2 = d2 + (12 - i) * digitCPF;

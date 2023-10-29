@@ -1,5 +1,6 @@
 package com.gerardojunior.registration.entity.meta;
 
+import com.gerardojunior.registration.dto.UpdateRequest;
 import com.gerardojunior.registration.enums.Gender;
 import com.gerardojunior.registration.enums.Role;
 import jakarta.persistence.*;
@@ -7,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -94,5 +94,13 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void merge(UpdateRequest request) {
+        this.firstname = request.getFirstname();
+        this.lastname = request.getLastname();
+        this.address = request.getAddress();
+        this.gender = request.getGender();
+        this.mobileNumber = request.getMobileNumber();
     }
 }
