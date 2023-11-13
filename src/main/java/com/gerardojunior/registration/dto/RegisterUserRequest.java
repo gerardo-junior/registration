@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
+public class RegisterUserRequest {
 
     @NotBlank
     @CPF(message = "the document field must contain a valid CPF")
@@ -27,7 +27,7 @@ public class RegisterRequest {
     private String lastname;
 
     @NotBlank
-    @Date(minimumYearsAgo = "18",
+    @Date(minYearsAgo = "18",
           message = "must contain a valid date at least 18 years ago in the format YYYY-MM-DD")
     private String dateOfBirth;
 

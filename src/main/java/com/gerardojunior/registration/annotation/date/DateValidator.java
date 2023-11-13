@@ -11,13 +11,17 @@ public class DateValidator implements ConstraintValidator<Date, Object> {
 
     private String regex;
 
-    private Integer minimumYearsAgo;
+    private Integer minYearsAgo;
+
+    private Integer maxYearsAgo;
 
     @Override
     public void initialize(Date date) {
         ConstraintValidator.super.initialize(date);
         this.regex = date.regex();
-        this.minimumYearsAgo = Integer.valueOf(date.minimumYearsAgo());
+        this.minYearsAgo = Integer.valueOf(date.minYearsAgo());
+        this.maxYearsAgo = Integer.valueOf(date.maxYearsAgo());
+
     }
 
     @Override
@@ -38,7 +42,15 @@ public class DateValidator implements ConstraintValidator<Date, Object> {
             return false;
         }
 
-        return this.minimumYearsAgo <= 0 || this.minimumYearsAgo <= ChronoUnit.YEARS.between(date, LocalDate.now());
+        if (this.minYearsAgo > 0 || this.maxYearsAgo > 0) {
+            long diffOfNow = ChronoUnit.YEARS.between(date, LocalDate.now());
+
+            if (this.minYearsAgo < diffOfNow && this.maxYearsAgo >= diffOfNow) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 }

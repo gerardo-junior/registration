@@ -1,10 +1,7 @@
 package com.gerardojunior.registration.services.impl;
 
 import com.gerardojunior.registration.config.JwtService;
-import com.gerardojunior.registration.dto.AuthenticationResponse;
-import com.gerardojunior.registration.dto.RegisterRequest;
-import com.gerardojunior.registration.dto.UpdateRequest;
-import com.gerardojunior.registration.dto.UserResponse;
+import com.gerardojunior.registration.dto.*;
 import com.gerardojunior.registration.entity.meta.User;
 import com.gerardojunior.registration.exception.NotFoundException;
 import com.gerardojunior.registration.exception.ValidateException;
@@ -14,9 +11,11 @@ import com.gerardojunior.registration.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 
 import java.util.Objects;
-
 
 @Service
 @RequiredArgsConstructor
@@ -28,8 +27,8 @@ public class UserServiceImpl implements UserService {
     private final AuthenticationServiceImpl authenticationService;
     private final IUserMapper mapper;
 
-    @Override
-    public AuthenticationResponse register(RegisterRequest request) {
+    @Transactional
+    public AuthenticationResponse register(RegisterUserRequest request) {
 
         if (0 < repository.countByEmailOrDocument(request.getEmail(), request.getDocument())) {
             throw new ValidateException("UserAlreadyRegistered", "This user is already registered");
@@ -50,14 +49,8 @@ public class UserServiceImpl implements UserService {
                                      .build();
     }
 
-    @Override
-    public UserResponse find(String document) {
-        User user = repository.findByDocument(document).orElseThrow(() -> new NotFoundException("UserNotFound", "User not found"));
-        return mapper.map(user);
-    }
-
-    @Override
-    public UserResponse update(String document, UpdateRequest request) {
+    @Transactional
+    public UserResponse update(String document, UpdateUserRequest request) {
         User user = repository.findByDocument(document).orElseThrow(() -> new NotFoundException("UserNotFound", "User not found"));
         user.merge(request);
 
@@ -68,6 +61,18 @@ public class UserServiceImpl implements UserService {
         repository.save(user);
 
         return mapper.map(user);
+    }
+
+    @Transactional(readOnly = true)
+    public UserResponse find(String document) {
+        User user = repository.findByDocument(document).orElseThrow(() -> new NotFoundException("UserNotFound", "User not found"));
+        return mapper.map(user);
+    }
+
+
+    @Transactional(readOnly = true)
+    public Page<UserResponse> search(SearchUserRequest searchUserRequest, Pageable pageable) {
+        return repository.findAll(searchUserRequest.toSpecification(), pageable).map(mapper::map);
     }
 
 }

@@ -1,6 +1,6 @@
 package com.gerardojunior.registration.entity.meta;
 
-import com.gerardojunior.registration.dto.UpdateRequest;
+import com.gerardojunior.registration.dto.UpdateUserRequest;
 import com.gerardojunior.registration.enums.Gender;
 import com.gerardojunior.registration.enums.Role;
 import jakarta.persistence.*;
@@ -96,7 +96,7 @@ public class User implements UserDetails {
         return true;
     }
 
-    public void merge(UpdateRequest request) {
+    public void merge(UpdateUserRequest request) {
         this.firstname = request.getFirstname();
         this.lastname = request.getLastname();
         this.address = request.getAddress();

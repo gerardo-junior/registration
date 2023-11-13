@@ -14,8 +14,6 @@ public class CPFValidator implements ConstraintValidator<CPF, String> {
         }
 
         int d1, d2, digit1, digit2, mod, digitCPF;
-        String nVerifyingDigit;
-
         d1 = d2 = 0;
 
         for (int i = 1; i < cpf.length() - 1; i++) {
@@ -31,11 +29,7 @@ public class CPFValidator implements ConstraintValidator<CPF, String> {
         mod = (d2 % 11);
         digit2 = mod < 2 ? 0 : 11 - mod;
 
-        String nDigVerific = cpf.substring(cpf.length() - 2);
-
-        nVerifyingDigit = String.valueOf(digit1) + digit2;
-
-        return nDigVerific.equals(nVerifyingDigit);
+        return cpf.substring(cpf.length() - 2).equals(String.valueOf(digit1) + digit2);
     }
 
 }

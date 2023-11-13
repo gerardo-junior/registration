@@ -1,15 +1,12 @@
 package com.gerardojunior.registration.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.gerardojunior.registration.entity.meta.Token;
 import com.gerardojunior.registration.enums.Gender;
 import com.gerardojunior.registration.enums.Role;
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 @Getter
 @Setter

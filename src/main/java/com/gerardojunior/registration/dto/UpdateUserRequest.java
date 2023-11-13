@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateRequest {
+public class UpdateUserRequest {
 
     @NotBlank
     private String firstname;

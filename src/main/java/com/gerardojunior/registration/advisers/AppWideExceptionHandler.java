@@ -5,6 +5,7 @@ import com.gerardojunior.registration.exception.ValidateException;
 import com.gerardojunior.registration.util.StandardResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -29,7 +30,7 @@ public class AppWideExceptionHandler {
 
     }
 
-    @ExceptionHandler(ValidateException.class)
+    @ExceptionHandler({ValidateException.class, HttpMessageNotReadableException.class})
     public ResponseEntity handleValidationException(ValidateException e) {
         return new ResponseEntity(new StandardResponse(Objects.isNull(e.getCode()) ? "400" : e.getCode(), Objects.isNull(e.getMessage()) ? "Error" : e.getMessage(), e.getBody()), HttpStatus.BAD_REQUEST);
     }
