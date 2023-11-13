@@ -2,19 +2,24 @@ package com.gerardojunior.registration.dto;
 
 import com.gerardojunior.registration.entity.meta.User;
 import jakarta.persistence.criteria.Predicate;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class SearchUserRequest {
 
     private String fullName;
-
-    private String firstname;
-
-    private String lastname;
 
     private String email;
 
@@ -29,15 +34,20 @@ public class SearchUserRequest {
         {
             List<Predicate> predicates = new ArrayList<>();
 
-            if (StringUtils.isNotEmpty(firstname)) {
-                predicates.add(criteriaBuilder.like(root.get("firstname"), firstname));
+            if (StringUtils.isNotEmpty(fullName)) {
+//                predicates.add(criteriaBuilder.like(criteriaBuilder.concat(root.get("firstname"), root.get("lastname")), fullName));
+
+                predicates.add(criteriaBuilder.like(criteriaBuilder.concat(criteriaBuilder.concat(root.get("firstname"), " ") , root.get("lastname")), fullName.toLowerCase()));
             }
+
             if (StringUtils.isNotEmpty(email)) {
-                predicates.add(criteriaBuilder.like(root.get("email"), email));
+                predicates.add(criteriaBuilder.equal(root.get("email"), email));
             }
-            if (createdAt != null) {
+
+            if (Objects.nonNull(createdAt)) {
                 predicates.add(criteriaBuilder.equal(root.get("createdAt"), createdAt));
             }
+
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }

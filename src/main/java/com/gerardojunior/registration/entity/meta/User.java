@@ -66,6 +66,15 @@ public class User implements UserDetails {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
+    public void setFirstname(String firstname) {
+        this.firstname = firstname.toLowerCase();
+    }
+
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname.toLowerCase();
+    }
+
     @Override
     public String getPassword() {
         return password;

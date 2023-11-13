@@ -36,14 +36,14 @@ public class UserResource {
         return new ResponseEntity(new StandardResponse("UserListed", "User Listed successfully", service.search(request, pageable)), HttpStatus.OK);
     }
 
-    @GetMapping("/{document}")
-    public ResponseEntity details(@PathVariable String document) {
-        return new ResponseEntity(new StandardResponse("UserFound", "User found successfully", service.find(document)), HttpStatus.OK);
-    }
-
     @PostMapping
     public ResponseEntity create(@RequestBody @Valid RegisterUserRequest request) {
         return new ResponseEntity(new StandardResponse("UserCreated", "User created successfully", service.register(request)), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{document}")
+    public ResponseEntity details(@PathVariable String document) {
+        return new ResponseEntity(new StandardResponse("UserFound", "User found successfully", service.find(document)), HttpStatus.OK);
     }
 
     @PutMapping("/{document}")
