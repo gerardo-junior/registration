@@ -21,7 +21,7 @@ import java.util.Objects;
 public class AppWideExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity handleException(Exception e) {
-        return new ResponseEntity(new StandardResponse("InternalError", "Internal server error", e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity(new StandardResponse("InternalError", e.getMessage(), null), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(NotFoundException.class)

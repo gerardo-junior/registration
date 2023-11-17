@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @Builder
@@ -34,7 +35,7 @@ public class User implements UserDetails {
     @Column(nullable = false, length = 100)
     private String firstname;
 
-    @Column(nullable = false, length = 100)
+    @Column(length = 100)
     private String lastname;
 
     @Column(nullable = false)
@@ -64,15 +65,6 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname.toLowerCase();
-    }
-
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname.toLowerCase();
     }
 
     @Override

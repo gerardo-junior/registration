@@ -3,6 +3,7 @@ package com.gerardojunior.registration.resources;
 import com.gerardojunior.registration.dto.RegisterUserRequest;
 import com.gerardojunior.registration.dto.SearchUserRequest;
 import com.gerardojunior.registration.dto.UpdateUserRequest;
+import com.gerardojunior.registration.dto.UserResponse;
 import com.gerardojunior.registration.services.UserService;
 import com.gerardojunior.registration.util.StandardResponse;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +35,8 @@ public class UserResource {
 //    @ApiResponses({ @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) }),
     @GetMapping
     public ResponseEntity list(@RequestBody @Valid SearchUserRequest request, @PageableDefault Pageable pageable) {
-        return new ResponseEntity(new StandardResponse("UserListed", "User Listed successfully", service.search(request, pageable)), HttpStatus.OK);
+        Page<UserResponse> users = service.search(request, pageable);
+        return new ResponseEntity(new StandardResponse("UserListed", "User Listed successfully", users.getContent(), users.getPageable()), HttpStatus.OK);
     }
 
     @PostMapping
