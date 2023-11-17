@@ -1,5 +1,7 @@
-package com.gerardojunior.registration.entity.meta;
+package com.gerardojunior.registration.entity;
 
+import com.gerardojunior.registration.entity.meta.Token;
+import com.gerardojunior.registration.entity.meta.User;
 import com.gerardojunior.registration.enums.TokenType;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,8 +33,8 @@ public class TokenTest {
         token.setToken("newTestToken");
         assertEquals("newTestToken", token.getToken());
 
-        token.setTokenType(TokenType.JWT);
-        assertEquals(TokenType.JWT, token.getTokenType());
+        token.setTokenType(TokenType.BEARER);
+        assertEquals(TokenType.BEARER, token.getTokenType());
 
         token.setRevoked(true);
         assertTrue(token.isRevoked());

@@ -1,21 +1,41 @@
 package com.gerardojunior.registration.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.junit.jupiter.api.Test;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class AuthenticationResponse {
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-    @JsonProperty("access_token")
-    private String accessToken;
+class AuthenticationResponseTest {
 
-    @JsonProperty("refresh_token")
-    private String refreshToken;
+    @Test
+    void testGetters() {
+        // Arrange
+        AuthenticationResponse response = AuthenticationResponse.builder()
+                .accessToken("access_token_value")
+                .refreshToken("refresh_token_value")
+                .build();
 
+        // Act
+        String accessToken = response.getAccessToken();
+        String refreshToken = response.getRefreshToken();
+
+        // Assert
+        assertEquals("access_token_value", accessToken);
+        assertEquals("refresh_token_value", refreshToken);
+    }
+
+    @Test
+    void testJsonPropertyNames() {
+        // Arrange
+        AuthenticationResponse response = AuthenticationResponse.builder()
+                .accessToken("access_token_value")
+                .refreshToken("refresh_token_value")
+                .build();
+
+        // Act
+        String json = "{\"access_token\":\"access_token_value\",\"refresh_token\":\"refresh_token_value\"}";
+
+        // Assert
+        assertEquals(json, response.toString());
+    }
 }
+

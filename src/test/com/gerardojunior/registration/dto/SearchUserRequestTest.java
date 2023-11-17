@@ -1,55 +1,68 @@
 package com.gerardojunior.registration.dto;
 
 import com.gerardojunior.registration.entity.meta.User;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
+import jakarta.persistence.criteria.Root;
+import org.junit.jupiter.api.Test;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class SearchUserRequest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
 
-    private String fullName;
+class SearchUserRequestTest {
 
-    private String email;
+    @Test
+    void testToSpecification() {
+        // Arrange
+        SearchUserRequest searchUserRequest = SearchUserRequest.builder()
+                .fullName("John Doe")
+                .email("john.doe@example.com")
+                .createdAt("2022-01-01")
+                .build();
 
-    private String address;
+        // Mocking JPA Criteria API components
+        Root<User> root = mock(Root.class);
+        CriteriaQuery<?> criteriaQuery = mock(CriteriaQuery.class);
+        CriteriaBuilder criteriaBuilder = mock(CriteriaBuilder.class);
 
-    private String mobileNumber;
+        // Act
+        Specification<User> specification = searchUserRequest.toSpecification();
+        Specification<User> composedSpecification = specification.and((root1, criteriaQuery1, criteriaBuilder1) -> null);
 
-    private String createdAt;
+        // Call toSpecification() method
+        Specification<User> result = composedSpecification.toSpecification();
 
-    public Specification<User> toSpecification() {
-        return (root, criteriaQuery, criteriaBuilder) ->
-        {
-            List<Predicate> predicates = new ArrayList<>();
+        // Call the toPredicate method of Specification
+        Predicate predicate = result.toPredicate(root, criteriaQuery, criteriaBuilder);
 
-            if (StringUtils.isNotEmpty(fullName)) {
-//                predicates.add(criteriaBuilder.like(criteriaBuilder.concat(root.get("firstname"), root.get("lastname")), fullName));
-
-                predicates.add(criteriaBuilder.like(criteriaBuilder.concat(criteriaBuilder.concat(root.get("firstname"), " ") , root.get("lastname")), fullName.toLowerCase()));
-            }
-
-            if (StringUtils.isNotEmpty(email)) {
-                predicates.add(criteriaBuilder.equal(root.get("email"), email));
-            }
-
-            if (Objects.nonNull(createdAt)) {
-                predicates.add(criteriaBuilder.equal(root.get("createdAt"), createdAt));
-            }
-
-            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-        };
+        // Assert
+        assertEquals(3, predicate.getExpressions().size()); // Three fields are used in the specification: fullName, email, createdAt
     }
 
+    @Test
+    void testToSpecificationWithEmptyValues() {
+        // Arrange
+        SearchUserRequest searchUserRequest = new SearchUserRequest();
+
+        // Mocking JPA Criteria API components
+        Root<User> root = mock(Root.class);
+        CriteriaQuery<?> criteriaQuery = mock(CriteriaQuery.class);
+        CriteriaBuilder criteriaBuilder = mock(CriteriaBuilder.class);
+
+        // Act
+        Specification<User> specification = searchUserRequest.toSpecification();
+        Specification<User> composedSpecification = specification.and((root1, criteriaQuery1, criteriaBuilder1) -> null);
+
+        // Call toSpecification() method
+        Specification<User> result = composedSpecification.toSpecification();
+
+        // Call the toPredicate method of Specification
+        Predicate predicate = result.toPredicate(root, criteriaQuery, criteriaBuilder);
+
+        // Assert
+        assertEquals(0, predicate.getExpressions().size()); // No fields are used in the specification as all values are empty
+    }
 }

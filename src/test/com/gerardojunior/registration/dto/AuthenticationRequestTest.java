@@ -1,21 +1,25 @@
 package com.gerardojunior.registration.dto;
+import com.gerardojunior.registration.dto.AuthenticationRequest;
+import org.junit.jupiter.api.Test;
 
-import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class AuthenticationRequest {
+class AuthenticationRequestTest {
 
-    @NotBlank
-    private String email;
+    @Test
+    void testGetters() {
+        // Arrange
+        AuthenticationRequest request = AuthenticationRequest.builder()
+                .email("john.doe@example.com")
+                .password("Passw0rd!")
+                .build();
 
-    @NotBlank
-    private String password;
+        // Act
+        String email = request.getEmail();
+        String password = request.getPassword();
 
+        // Assert
+        assertEquals("john.doe@example.com", email);
+        assertEquals("Passw0rd!", password);
+    }
 }

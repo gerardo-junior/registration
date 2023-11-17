@@ -1,35 +1,48 @@
 package com.gerardojunior.registration.annotation.document;
 
-import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import org.junit.jupiter.api.Test;
 
-import java.util.Objects;
 
-public class CPFValidator implements ConstraintValidator<CPF, String> {
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
 
-    @Override
-    public boolean isValid(String cpf, ConstraintValidatorContext context) {
-        if (Objects.isNull(cpf) || !cpf.matches("\\d{11}") || cpf.matches("^(.)\\1*$")) {
-            return false;
-        }
+class CPFValidatorTest {
 
-        int d1, d2, digit1, digit2, mod, digitCPF;
-        d1 = d2 = 0;
+    @Test
+    void testValidCPF() {
+        CPFValidator validator = new CPFValidator();
 
-        for (int i = 1; i < cpf.length() - 1; i++) {
-            digitCPF = Integer.parseInt(cpf.substring(i - 1, i));
-
-            d1 = d1 + (11 - i) * digitCPF;
-            d2 = d2 + (12 - i) * digitCPF;
-        }
-
-        mod = (d1 % 11);
-        digit1 = mod < 2 ? 0 : 11 - mod;
-        d2 += 2 * digit1;
-        mod = (d2 % 11);
-        digit2 = mod < 2 ? 0 : 11 - mod;
-
-        return cpf.substring(cpf.length() - 2).equals(String.valueOf(digit1) + digit2);
+        assertTrue(validator.isValid("12345678909", mock(ConstraintValidatorContext.class))); // Replace with an actual valid CPF
     }
 
+    @Test
+    void testInvalidCPF() {
+        CPFValidator validator = new CPFValidator();
+
+        assertFalse(validator.isValid("00000000000", mock(ConstraintValidatorContext.class))); // Replace with an actual invalid CPF
+    }
+
+    @Test
+    void testInvalidFormat() {
+        CPFValidator validator = new CPFValidator();
+
+        assertFalse(validator.isValid("123.456.789-09", mock(ConstraintValidatorContext.class))); // Replace with an invalid format CPF
+    }
+
+    @Test
+    void testEmptyCPF() {
+        CPFValidator validator = new CPFValidator();
+
+        assertFalse(validator.isValid("", mock(ConstraintValidatorContext.class))); // Empty CPF should be invalid
+    }
+
+    @Test
+    void testNullCPF() {
+        CPFValidator validator = new CPFValidator();
+
+        assertFalse(validator.isValid(null, mock(ConstraintValidatorContext.class))); // Null CPF should be invalid
+    }
+}
 }

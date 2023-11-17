@@ -1,34 +1,82 @@
 package com.gerardojunior.registration.dto;
 
 import com.gerardojunior.registration.enums.Gender;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class UpdateUserRequest {
+import java.util.Set;
 
-    @NotBlank
-    private String firstname;
+import static org.junit.jupiter.api.Assertions.*;
 
-    @NotBlank
-    private String lastname;
+class UpdateUserRequestTest {
 
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{4,}$", message = "password must be min 4 length containing atleast 1 uppercase, 1 lowercase, 1 special character and 1 digit")
-    private String password;
+    private static Validator validator;
 
-    private String address;
+    @BeforeAll
+    static void setUp() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+    }
 
-    private String mobileNumber;
+    @Test
+    void testValidUpdateUserRequest() {
+        // Arrange
+        UpdateUserRequest request = UpdateUserRequest.builder()
+                .firstname("John")
+                .lastname("Doe")
+                .password("Passw0rd!")
+                .address("123 Main St")
+                .mobileNumber("1234567890")
+                .gender(Gender.MALE)
+                .build();
 
-    @NotNull
-    private Gender gender;
+        // Act
+        Set<ConstraintViolation<UpdateUserRequest>> violations = validator.validate(request);
 
+        // Assert
+        assertTrue(violations.isEmpty());
+    }
+
+    @Test
+    void testInvalidUpdateUserRequest() {
+        // Arrange
+        UpdateUserRequest request = UpdateUserRequest.builder()
+                .firstname("")
+                .lastname("Doe")
+                .password("password")  // Invalid password
+                .address("123 Main St")
+                .mobileNumber("1234567890")
+                .gender(Gender.MALE)
+                .build();
+
+        // Act
+        Set<ConstraintViolation<UpdateUserRequest>> violations = validator.validate(request);
+
+        // Assert
+        assertEquals(2, violations.size()); // Two fields are invalid: firstname, password
+    }
+
+    @Test
+    void testNullGender() {
+        // Arrange
+        UpdateUserRequest request = UpdateUserRequest.builder()
+                .firstname("John")
+                .lastname("Doe")
+                .password("Passw0rd!")
+                .address("123 Main St")
+                .mobileNumber("1234567890")
+                .gender(null)
+                .build();
+
+        // Act
+        Set<ConstraintViolation<UpdateUserRequest>> violations = validator.validate(request);
+
+        // Assert
+        assertFalse(violations.isEmpty());
+    }
 }
+

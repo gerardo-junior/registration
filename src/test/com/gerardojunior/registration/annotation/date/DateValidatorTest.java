@@ -1,56 +1,57 @@
 package com.gerardojunior.registration.annotation.date;
 
-import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.Objects;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
 
-public class DateValidator implements ConstraintValidator<Date, Object> {
+class DateValidatorTest {
 
-    private String regex;
+    @Test
+    void testValidDate() {
+        DateValidator validator = new DateValidator();
+        Date dateAnnotation = mock(Date.class);
 
-    private Integer minYearsAgo;
-
-    private Integer maxYearsAgo;
-
-    @Override
-    public void initialize(Date date) {
-        ConstraintValidator.super.initialize(date);
-        this.regex = date.regex();
-        this.minYearsAgo = Integer.valueOf(date.minYearsAgo());
-        this.maxYearsAgo = Integer.valueOf(date.maxYearsAgo());
-
+        assertTrue(validator.isValid("2021-01-01", mock(ConstraintValidatorContext.class))); // Replace with an actual valid date
     }
 
-    @Override
-    public boolean isValid(Object input, ConstraintValidatorContext context) {
-        if (Objects.isNull(input) || !(input instanceof String value)) {
-            return false;
-        }
+    @Test
+    void testInvalidDate() {
+        DateValidator validator = new DateValidator();
+        Date dateAnnotation = mock(Date.class);
 
-        if (!value.matches(this.regex)) {
-            return false;
-        }
-
-        LocalDate date;
-
-        try {
-            date = LocalDate.parse(value);
-        } catch (Exception e) {
-            return false;
-        }
-
-        if (this.minYearsAgo > 0 || this.maxYearsAgo > 0) {
-            long diffOfNow = ChronoUnit.YEARS.between(date, LocalDate.now());
-
-            if (this.minYearsAgo < diffOfNow && this.maxYearsAgo >= diffOfNow) {
-                return false;
-            }
-        }
-
-        return true;
+        assertFalse(validator.isValid("invalid_date", mock(ConstraintValidatorContext.class)));
     }
 
+    @Test
+    void testDateWithinRange() {
+        DateValidator validator = new DateValidator();
+        Date dateAnnotation = mock(Date.class);
+        validator.initialize(dateAnnotation);
+        validator.minYearsAgo = 1;
+        validator.maxYearsAgo = 5;
+
+        assertTrue(validator.isValid("2020-01-01", mock(ConstraintValidatorContext.class))); // Replace with an actual date within the range
+    }
+
+    @Test
+    void testDateOutOfRange() {
+        DateValidator validator = new DateValidator();
+        Date dateAnnotation = mock(Date.class);
+        validator.initialize(dateAnnotation);
+        validator.minYearsAgo = 1;
+        validator.maxYearsAgo = 5;
+
+        assertFalse(validator.isValid("2010-01-01", mock(ConstraintValidatorContext.class))); // Replace with an actual date outside the range
+    }
+
+    @Test
+    void testDateWithInvalidFormat() {
+        DateValidator validator = new DateValidator();
+        Date dateAnnotation = mock(Date.class);
+
+        assertFalse(validator.isValid("20210101", mock(ConstraintValidatorContext.class))); // Replace with an actual date with an invalid format
+    }
 }

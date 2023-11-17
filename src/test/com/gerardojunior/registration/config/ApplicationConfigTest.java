@@ -1,46 +1,43 @@
 package com.gerardojunior.registration.config;
 
+import com.gerardojunior.registration.config.ApplicationConfig;
 import com.gerardojunior.registration.repositories.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.junit.jupiter.api.Test;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
-@Configuration
-@RequiredArgsConstructor
-public class ApplicationConfig {
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-    private final UserRepository repository;
+class ApplicationConfigTest {
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return username -> repository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    @Test
+    void testUserDetailsService() {
+        UserRepository repository = mock(UserRepository.class);
+        when(repository.findByEmail("existingUser")).thenReturn(/* mock your user here */);
+
+        ApplicationConfig config = new ApplicationConfig(repository);
+        InMemoryUserDetailsManager userDetailsManager = (InMemoryUserDetailsManager) config.userDetailsService();
+        assertNotNull(userDetailsManager.loadUserByUsername("existingUser"));
+
+        assertThrows(UsernameNotFoundException.class, () -> userDetailsManager.loadUserByUsername("nonExistingUser"));
     }
 
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService());
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
+    @Test
+    void testAuthenticationProvider() {
+        UserRepository repository = mock(UserRepository.class);
+        when(repository.findByEmail("existingUser")).thenReturn(/* mock your user here */);
+
+        ApplicationConfig config = new ApplicationConfig(repository);
+        assertTrue(config.authenticationProvider() instanceof AuthenticationProvider);
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
+    @Test
+    void testPasswordEncoder() {
+        ApplicationConfig config = new ApplicationConfig(/* mock your UserRepository here */);
+        assertTrue(config.passwordEncoder() instanceof BCryptPasswordEncoder);
     }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
 }

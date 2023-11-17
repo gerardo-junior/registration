@@ -1,47 +1,33 @@
 package com.gerardojunior.registration.dto;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gerardojunior.registration.enums.Gender;
 import com.gerardojunior.registration.enums.Role;
-import lombok.*;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
-@Getter
-@Setter
-public class UserResponse {
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-    private String document;
+class UserResponseTest {
 
-    private String firstname;
-
-    private String lastname;
-
-    private LocalDate dateOfBirth;
-
-    private String address;
-
-    private String mobileNumber;
-
-    private Gender gender;
-
-    private String email;
-
-    private Role role;
-
-    @JsonProperty("gender")
-    public String getGender() {
-        return this.gender.toString();
+    @Test
+    void testGetGender() {
+        UserResponse userResponse = new UserResponse();
+        userResponse.setGender(Gender.MALE);
+        assertEquals("MALE", userResponse.getGender());
     }
 
-    @JsonProperty("role")
-    public String getRole() {
-        return this.role.toString();
+    @Test
+    void testGetRole() {
+        UserResponse userResponse = new UserResponse();
+        userResponse.setRole(Role.ADMIN);
+        assertEquals("ADMIN", userResponse.getRole());
     }
 
-    @JsonProperty("dateOfBirth")
-    public String getDateOfBirth() {
-        return this.dateOfBirth.format(DateTimeFormatter.ISO_DATE);
+    @Test
+    void testGetDateOfBirth() {
+        UserResponse userResponse = new UserResponse();
+        userResponse.setDateOfBirth(LocalDate.of(1990, 1, 1));
+        assertEquals("1990-01-01", userResponse.getDateOfBirth());
     }
+
 }
