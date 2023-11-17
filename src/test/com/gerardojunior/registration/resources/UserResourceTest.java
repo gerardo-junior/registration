@@ -2,52 +2,80 @@ package com.gerardojunior.registration.resources;
 
 import com.gerardojunior.registration.dto.RegisterUserRequest;
 import com.gerardojunior.registration.dto.SearchUserRequest;
-import com.gerardojunior.registration.dto.UpdateUserRequest;
 import com.gerardojunior.registration.dto.UserResponse;
 import com.gerardojunior.registration.services.UserService;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import com.gerardojunior.registration.util.StandardResponse;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.data.domain.Pageable;
 
+import java.util.Collections;
 
-@RestController
-@RequestMapping("/api/v1/user")
-@RequiredArgsConstructor
-@Tag(name = "Users", description = "User managment apis")
-public class UserResource {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
-    private final UserService service;
+class UserResourceTest {
 
-//    @ApiResponses({ @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) }),
-//                    @ApiResponse(responseCode = "403", content = { @Content(schema = @Schema()) }),
-//                    @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
-//                    @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
-    @GetMapping
-    public ResponseEntity<StandardResponse> list(@RequestBody @Valid SearchUserRequest request, @PageableDefault Pageable pageable) {
-        Page<UserResponse> users = service.search(request, pageable);
-        return new ResponseEntity<>(new StandardResponse("UserListed", "User Listed successfully", users.getContent(), users.getPageable()), HttpStatus.OK);
+    @Mock
+    private UserService userService;
+
+    @InjectMocks
+    private UserResource userResource;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
     }
 
-    @PostMapping
-    public ResponseEntity<StandardResponse> create(@RequestBody @Valid RegisterUserRequest request) {
-        return new ResponseEntity<>(new StandardResponse("UserCreated", "User created successfully", service.register(request)), HttpStatus.CREATED);
+    @Test
+    void listUsers() {
+        // Mocking
+        SearchUserRequest searchUserRequest = new SearchUserRequest();
+        Pageable pageable = PageableDefault.of();
+        Page<UserResponse> userResponsePage = new PageImpl<>(Collections.emptyList(), pageable, 0);
+        when(userService.search(searchUserRequest, pageable)).thenReturn(userResponsePage);
+
+        // Test
+        ResponseEntity<StandardResponse> responseEntity = userResource.list(searchUserRequest, pageable);
+
+        // Verification
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals("UserListed", responseEntity.getBody().getMeta().getCode());
+        assertEquals("User Listed successfully", responseEntity.getBody().getMeta().getMessage());
+        assertEquals(userResponsePage.getContent(), responseEntity.getBody().getData());
+        assertEquals(userResponsePage.getPageable(), responseEntity.getBody().getMeta().getPageable());
+
+        // Verify that the service method was called
+        verify(userService, times(1)).search(searchUserRequest, pageable);
     }
 
-    @GetMapping("/{document}")
-    public ResponseEntity<StandardResponse> details(@PathVariable String document) {
-        return new ResponseEntity<>(new StandardResponse("UserFound", "User found successfully", service.find(document)), HttpStatus.OK);
+    @Test
+    void createUser() {
+        // Mocking
+        RegisterUserRequest registerUserRequest = new RegisterUserRequest();
+        when(userService.register(registerUserRequest)).thenReturn(new UserResponse());
+
+        // Test
+        ResponseEntity<StandardResponse> responseEntity = userResource.create(registerUserRequest);
+
+        // Verification
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        assertEquals("UserCreated", responseEntity.getBody().getMeta().getCode());
+        assertEquals("User created successfully", responseEntity.getBody().getMeta().getMessage());
+        assertEquals(new UserResponse(), responseEntity.getBody().getData());
+
+        // Verify that the service method was called
+        verify(userService, times(1)).register(registerUserRequest);
     }
 
-    @PutMapping("/{document}")
-    public ResponseEntity<StandardResponse> update(@PathVariable String document,
-                                 @RequestBody @Valid UpdateUserRequest request) {
-        return new ResponseEntity<>(new StandardResponse("UserUpdated", "User updated successfully", service.update(document, request)), HttpStatus.OK);
-    }
+    // Similar tests for details() and update() methods can be added
 
 }

@@ -1,34 +1,47 @@
 package com.gerardojunior.registration.entity.meta;
 
 import com.gerardojunior.registration.enums.TokenType;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Entity
-public class Token {
+public class TokenTest {
 
-    @Id
-    @GeneratedValue
-    public Integer id;
+    @Test
+    void testTokenEntity() {
+        // Mocking
+        User user = new User();
+        Token token = Token.builder()
+                .id(1)
+                .token("testToken")
+                .tokenType(TokenType.BEARER)
+                .revoked(false)
+                .expired(false)
+                .user(user)
+                .build();
 
-    @Column(unique = true)
-    public String token;
+        // Verification
+        assertEquals(1, token.getId());
+        assertEquals("testToken", token.getToken());
+        assertEquals(TokenType.BEARER, token.getTokenType());
+        assertFalse(token.isRevoked());
+        assertFalse(token.isExpired());
+        assertEquals(user, token.getUser());
 
-    @Enumerated(EnumType.STRING)
-    public TokenType tokenType = TokenType.BEARER;
+        // Test Setter
+        token.setToken("newTestToken");
+        assertEquals("newTestToken", token.getToken());
 
-    public boolean revoked;
+        token.setTokenType(TokenType.JWT);
+        assertEquals(TokenType.JWT, token.getTokenType());
 
-    public boolean expired;
+        token.setRevoked(true);
+        assertTrue(token.isRevoked());
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    public User user;
+        token.setExpired(true);
+        assertTrue(token.isExpired());
+
+        User newUser = new User();
+        token.setUser(newUser);
+        assertEquals(newUser, token.getUser());
+    }
 }
