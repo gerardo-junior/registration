@@ -26,7 +26,7 @@ Executando o projeto com Docker Compose
 No diretório do projeto, execute o seguinte comando para criar e iniciar os contêineres:
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 Aguarde até que os contêineres sejam iniciados e o aplicativo esteja pronto para uso.
@@ -37,7 +37,7 @@ Parando e Removendo os Contêineres
 Para parar e remover os contêineres, execute o seguinte comando:
 
 ```bash
-docker-compose down
+docker compose down
 ```
 
 Isso encerrará os contêineres e removerá os recursos associados.

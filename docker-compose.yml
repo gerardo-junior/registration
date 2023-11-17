@@ -1,25 +1,15 @@
 version: '3'
 services:
   app:
-    build: .docker
+    build: .
     ports:
-      - "8080:8080"
+      - 8080:8080
     depends_on:
       - mysql
     env_file:
       - .env.example
-    networks:
-      - registration
 
   mysql:
     image: mysql:latest
-    ports:
-      - "3306:3306"
     env_file:
       - .env.example
-    networks:
-      - registration
-
-networks:
-  my-network:
-    driver: bridge
