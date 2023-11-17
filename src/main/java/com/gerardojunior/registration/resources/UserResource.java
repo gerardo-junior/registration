@@ -29,30 +29,30 @@ public class UserResource {
 
     private final UserService service;
 
+//    @ApiResponses({ @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) }),
 //                    @ApiResponse(responseCode = "403", content = { @Content(schema = @Schema()) }),
 //                    @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
 //                    @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
-//    @ApiResponses({ @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) }),
     @GetMapping
-    public ResponseEntity list(@RequestBody @Valid SearchUserRequest request, @PageableDefault Pageable pageable) {
+    public ResponseEntity<StandardResponse> list(@RequestBody @Valid SearchUserRequest request, @PageableDefault Pageable pageable) {
         Page<UserResponse> users = service.search(request, pageable);
-        return new ResponseEntity(new StandardResponse("UserListed", "User Listed successfully", users.getContent(), users.getPageable()), HttpStatus.OK);
+        return new ResponseEntity<>(new StandardResponse("UserListed", "User Listed successfully", users.getContent(), users.getPageable()), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity create(@RequestBody @Valid RegisterUserRequest request) {
-        return new ResponseEntity(new StandardResponse("UserCreated", "User created successfully", service.register(request)), HttpStatus.CREATED);
+    public ResponseEntity<StandardResponse> create(@RequestBody @Valid RegisterUserRequest request) {
+        return new ResponseEntity<>(new StandardResponse("UserCreated", "User created successfully", service.register(request)), HttpStatus.CREATED);
     }
 
     @GetMapping("/{document}")
-    public ResponseEntity details(@PathVariable String document) {
-        return new ResponseEntity(new StandardResponse("UserFound", "User found successfully", service.find(document)), HttpStatus.OK);
+    public ResponseEntity<StandardResponse> details(@PathVariable String document) {
+        return new ResponseEntity<>(new StandardResponse("UserFound", "User found successfully", service.find(document)), HttpStatus.OK);
     }
 
     @PutMapping("/{document}")
-    public ResponseEntity update(@PathVariable String document,
+    public ResponseEntity<StandardResponse> update(@PathVariable String document,
                                  @RequestBody @Valid UpdateUserRequest request) {
-        return new ResponseEntity(new StandardResponse("UserUpdated", "User updated successfully", service.update(document, request)), HttpStatus.OK);
+        return new ResponseEntity<>(new StandardResponse("UserUpdated", "User updated successfully", service.update(document, request)), HttpStatus.OK);
     }
 
 }

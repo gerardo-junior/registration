@@ -8,8 +8,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import com.gerardojunior.registration.annotation.document.CPF;
+import org.apache.commons.lang3.EnumUtils;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Data
 @Builder
@@ -44,11 +46,14 @@ public class RegisterUserRequest {
 
     private String mobileNumber;
 
-    @NotNull
-    private Gender gender;
+    private String gender;
 
     public LocalDate getDateOfBirth() {
         return LocalDate.parse(this.dateOfBirth);
+    }
+
+    public Gender getGender() {
+        return Objects.nonNull(this.gender) && EnumUtils.isValidEnum(Gender.class, this.gender)  ? Gender.valueOf(this.gender) : Gender.UNKNOWN;
     }
 
 }

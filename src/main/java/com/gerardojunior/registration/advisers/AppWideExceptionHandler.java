@@ -30,7 +30,7 @@ public class AppWideExceptionHandler {
 
     }
 
-    @ExceptionHandler({ValidateException.class})
+    @ExceptionHandler({ValidateException.class, HttpMessageNotReadableException.class})
     public ResponseEntity handleValidationException(ValidateException e) {
         return new ResponseEntity(new StandardResponse(Objects.isNull(e.getCode()) ? "400" : e.getCode(), Objects.isNull(e.getMessage()) ? "Error" : e.getMessage(), e.getBody()), HttpStatus.BAD_REQUEST);
     }

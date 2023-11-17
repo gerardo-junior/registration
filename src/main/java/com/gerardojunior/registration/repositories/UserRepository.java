@@ -9,7 +9,6 @@ import org.springframework.data.repository.ListCrudRepository;
 
 import java.util.Optional;
 
-//public interface UserRepository extends JpaRepository<User, Integer> {
 public interface UserRepository extends ListCrudRepository<User, String>, JpaSpecificationExecutor<User> {
 
     Optional<User> findByEmail(String email);
