@@ -15,7 +15,7 @@ Certifique-se de ter as seguintes ferramentas instaladas em sua máquina antes d
 1. Clone o repositório para a sua máquina local:
 
 ```bash
-   git clone [https://github.com/gerardo-junior/registration](https://github.com/gerardo-junior/registration)
+   git clone https://github.com/gerardo-junior/registration.git
 ```
 Navegue até o diretório do projeto:
 
@@ -96,7 +96,8 @@ curl --location 'http://localhost:8080/api/v1/auth/login' \
 
 ```
 
-para pesquisar por algum usuários:
+Para pesquisar por algum usuário:
+
 ```bash
 curl --location --request GET 'http://localhost:8080/api/v1/user' \
 --header 'Content-Type: application/json' \
@@ -117,7 +118,8 @@ curl --location --request GET 'http://localhost:8080/api/v1/user' \
 # 	]
 # }
 ```
-detalhes de usuários
+
+Detalhes de usuários
 
 ```bash
 curl --location 'http://localhost:8080/api/v1/user/89016061002' \
@@ -138,12 +140,12 @@ curl --location --request PUT 'http://localhost:8080/api/v1/user/89016061002' \
 --header 'Content-Type: application/json' \
 --header "Authorization: Bearer $TOKEN" \
 --data  '{
-"firstname": "xablau",
-"lastname": "da silva",
-"password": "xabl!A2",
-"address": "R. sei la onde, 69",
-"mobileNumber": "2197677274",
-"gender": "MALE"
+    "firstname": "xablau",
+    "lastname": "da silva",
+    "password": "xabl!A2",
+    "address": "R. sei la onde, 69",
+    "mobileNumber": "2197677274",
+    "gender": "MALE"
 }'
 
 # {
@@ -157,6 +159,7 @@ curl --location --request PUT 'http://localhost:8080/api/v1/user/89016061002' \
 # }
 ```
 
+para mais informações basta acessar o swagger do projeto: [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
 
 Contribuindo
 Se você quiser contribuir para este projeto, por favor, siga estas etapas:
