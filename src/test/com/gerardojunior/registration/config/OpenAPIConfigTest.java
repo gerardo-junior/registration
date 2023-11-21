@@ -1,52 +1,50 @@
 package com.gerardojunior.registration.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.servers.Server;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Configuration
-@RequiredArgsConstructor
-public class  OpenAPIConfig {
+@SpringBootTest
+class OpenAPIConfigTest {
 
-    @Value("${bezkoder.openapi.dev-url}")
-    private String devUrl;
+    @Autowired
+    private OpenAPI openAPI;
 
-    @Value("${bezkoder.openapi.prod-url}")
-    private String prodUrl;
+    @Test
+    void testOpenAPIConfiguration() {
+        // Verifica se a configuração da documentação OpenAPI está correta
 
-    @Bean
-    public OpenAPI myOpenAPI() {
-        Server devServer = new Server();
-        devServer.setUrl(devUrl);
-        devServer.setDescription("Server URL in Development environment");
+        // Verifica o título da API
+        Info info = openAPI.getInfo();
+        assertEquals("Demo Service API", info.getTitle());
 
-        Server prodServer = new Server();
-        prodServer.setUrl(prodUrl);
-        prodServer.setDescription("Server URL in Production environment");
+        // Verifica a versão da API
+        assertEquals("1.0", info.getVersion());
 
-        Contact contact = new Contact();
-        contact.setEmail("me@gerardo-junior.com");
-        contact.setName("Gerardo Junior");
-        contact.setUrl("https://gerardo-junior.com");
+        // Verifica a descrição da API
+        assertEquals("This API exposes endpoints to manage demo.", info.getDescription());
 
-        License mitLicense = new License().name("MIT License").url("https://choosealicense.com/licenses/mit/");
+        // Verifica o contato
+        assertEquals("me@gerardo-junior.com", info.getContact().getEmail());
+        assertEquals("Gerardo Junior", info.getContact().getName());
+        assertEquals("https://gerardo-junior.com", info.getContact().getUrl());
 
-        Info info = new Info()
-                .title("Demo Service API")
-                .version("1.0")
-                .contact(contact)
-                .description("This API exposes endpoints to manage demo.")
-                .termsOfService("https://gerardo-junior.com")
-                .license(mitLicense);
+        // Verifica as informações da licença
+        assertEquals("MIT License", info.getLicense().getName());
+        assertEquals("https://choosealicense.com/licenses/mit/", info.getLicense().getUrl());
 
-        return new OpenAPI().info(info).servers(List.of(devServer, prodServer));
+        // Verifica os servidores
+        assertEquals(2, openAPI.getServers().size());
+        Server devServer = openAPI.getServers().get(0);
+        Server prodServer = openAPI.getServers().get(1);
+        assertEquals("http://localhost:8080", devServer.getUrl());
+        assertEquals("Server URL in Development environment", devServer.getDescription());
+        assertEquals("http://api.example.com", prodServer.getUrl());
+        assertEquals("Server URL in Production environment", prodServer.getDescription());
     }
 }

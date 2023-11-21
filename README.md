@@ -1,3 +1,4 @@
+
 # [User Register and auth](https://github.com/gerardo-junior/registration)
 
 Este é um projeto Spring Boot configurado para ser executado em contêineres Docker usando Docker Compose. Ele fornece um ambiente de desenvolvimento consistente e facilita a implantação em diferentes ambientes.
@@ -14,7 +15,7 @@ Certifique-se de ter as seguintes ferramentas instaladas em sua máquina antes d
 1. Clone o repositório para a sua máquina local:
 
 ```bash
-   git clone [https://github.com/seu-usuario/spring-boot-docker-compose](https://github.com/gerardo-junior/registration)
+   git clone [https://github.com/gerardo-junior/registration](https://github.com/gerardo-junior/registration)
 ```
 Navegue até o diretório do projeto:
 
@@ -39,8 +40,123 @@ Para parar e remover os contêineres, execute o seguinte comando:
 ```bash
 docker compose down
 ```
-
 Isso encerrará os contêineres e removerá os recursos associados.
+
+## Como usar
+uma vez os containers rodando para criar usuários para executar esse request
+
+```bash
+curl --location 'http://localhost:8080/api/v1/user' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "firstname": "Xablau",
+    "lastname": "da silva",
+    "dateOfBirth": "1991-04-01",
+    "document": "89016061002",
+    "email": "xabla@example.com",
+    "password": "12xablaU@",
+    "address": "R. sei la onde, 69",
+    "mobileNumber": "1199999999",
+    "gender": "MALE"
+}'
+
+# {
+#     "meta": {
+#         "code": "UserCreated",
+#         "message": "User created successfully"
+#     },
+#     "data": {
+#         "access_token": "...",
+#         "refresh_token": "..."
+#     }
+# }
+```
+no campo `access_token` retorna jwt que é utilizado como token de autenticação que deve ser passado no header `authentication`.  para facilitar é recomendado adicionar esse token em uma variável de ambiente `export TOKEN=...`
+
+caso o token expirar basta executar esse request:
+
+```bash
+curl --location 'http://localhost:8080/api/v1/auth/login' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "email": "xabla@example.com",
+    "password": "12xablaU@"
+}'
+
+# {
+#     "meta": {
+#         "code": "AuthSuccessfully",
+#         "message": "Authentication completed successfully"
+#     },
+#     "data": {
+#         "access_token": "...",
+#         "refresh_token": "..."
+#     }
+# }
+
+```
+
+para pesquisar por algum usuários:
+```bash
+curl --location --request GET 'http://localhost:8080/api/v1/user' \
+--header 'Content-Type: application/json' \
+--header "Authorization: Bearer $TOKEN" \
+--data '{
+    "fullName": "Xablau"
+}'
+
+# {
+#  "meta": {
+#  "code": "UserListed",
+#  "message": "User Listed successfully",
+#  "pageable": {
+#  		...
+# 	},
+#  "data": [
+#  		...
+# 	]
+# }
+```
+detalhes de usuários
+
+```bash
+curl --location 'http://localhost:8080/api/v1/user/89016061002' \
+--header "Authorization: Bearer $TOKEN"
+
+# {
+# 	"meta": {
+# 		"code": "UserFound",
+# 		"message": "User found successfully"
+# 	},
+# 	"data": {
+# 		...
+# 	}
+# }
+```
+```bash
+curl --location --request PUT 'http://localhost:8080/api/v1/user/89016061002' \
+--header 'Content-Type: application/json' \
+--header "Authorization: Bearer $TOKEN" \
+--data  '{
+"firstname": "xablau",
+"lastname": "da silva",
+"password": "xabl!A2",
+"address": "R. sei la onde, 69",
+"mobileNumber": "2197677274",
+"gender": "MALE"
+}'
+
+# {
+# 	"meta":  {
+# 		"code":  "UserUpdated",
+# 		"message":  "User updated successfully"
+# 	},
+# 	"data":  {
+# 		...
+# 	}
+# }
+```
+
 
 Contribuindo
 Se você quiser contribuir para este projeto, por favor, siga estas etapas:

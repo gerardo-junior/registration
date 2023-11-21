@@ -1,24 +1,53 @@
 package com.gerardojunior.registration.exception;
 
-import lombok.Getter;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-@Getter
-public class NotFoundException extends RuntimeException {
-    private String code;
-    private Object body;
+public class NotFoundExceptionTest {
 
-    public NotFoundException(String message) {
-        super(message);
+    @Test
+    public void createNotFoundExceptionWithMessage() {
+        // Arrange
+        String errorMessage = "Resource not found";
+
+        // Act
+        NotFoundException notFoundException = new NotFoundException(errorMessage);
+
+        // Assert
+        assertEquals(errorMessage, notFoundException.getMessage());
+        assertEquals("404 NOT_FOUND", notFoundException.getCode());
+        assertNull(notFoundException.getBody());
     }
 
-    public NotFoundException(String code, String message) {
-        super(message);
-        this.code = code;
+    @Test
+    public void createNotFoundExceptionWithCodeAndMessage() {
+        // Arrange
+        String errorCode = "RESOURCE_NOT_FOUND";
+        String errorMessage = "Resource not found";
+
+        // Act
+        NotFoundException notFoundException = new NotFoundException(errorCode, errorMessage);
+
+        // Assert
+        assertEquals(errorMessage, notFoundException.getMessage());
+        assertEquals(errorCode, notFoundException.getCode());
+        assertNull(notFoundException.getBody());
     }
 
-    public NotFoundException(String code, String message, Object body) {
-        super(message);
-        this.code = code;
-        this.body = body;
+    @Test
+    public void createNotFoundExceptionWithCodeMessageAndBody() {
+        // Arrange
+        String errorCode = "RESOURCE_NOT_FOUND";
+        String errorMessage = "Resource not found";
+        Object errorBody = new Object(); // Replace with your specific object
+
+        // Act
+        NotFoundException notFoundException = new NotFoundException(errorCode, errorMessage, errorBody);
+
+        // Assert
+        assertEquals(errorMessage, notFoundException.getMessage());
+        assertEquals(errorCode, notFoundException.getCode());
+        assertEquals(errorBody, notFoundException.getBody());
     }
 }

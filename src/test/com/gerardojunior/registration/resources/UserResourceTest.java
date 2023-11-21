@@ -13,7 +13,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -39,7 +38,7 @@ class UserResourceTest {
     void listUsers() {
         // Mocking
         SearchUserRequest searchUserRequest = new SearchUserRequest();
-        Pageable pageable = PageableDefault.of();
+        Pageable pageable = new Pageable();
         Page<UserResponse> userResponsePage = new PageImpl<>(Collections.emptyList(), pageable, 0);
         when(userService.search(searchUserRequest, pageable)).thenReturn(userResponsePage);
 
@@ -75,7 +74,5 @@ class UserResourceTest {
         // Verify that the service method was called
         verify(userService, times(1)).register(registerUserRequest);
     }
-
-    // Similar tests for details() and update() methods can be added
 
 }

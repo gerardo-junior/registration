@@ -1,23 +1,22 @@
 package com.gerardojunior.registration.config;
 
 import com.gerardojunior.registration.entity.meta.User;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
+import com.gerardojunior.registration.enums.Role;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
 
-import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-@Service
-public class JwtService {
+@SpringBootTest
+class JwtServiceTest {
+
+    @Autowired
+    private JwtService jwtService;
 
     @Value("${application.security.jwt.secret-key}")
     private String secretKey;
@@ -26,73 +25,71 @@ public class JwtService {
     @Value("${application.security.jwt.refresh-token.expiration}")
     private long refreshExpiration;
 
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+    @Test
+    void testGenerateToken() {
+        // Arrange
+        User user = mock(User.class);
+        when(user.getUsername()).thenReturn("testUser");
+        when(user.getRole()).thenReturn(Role.USER);
+
+        // Act
+        String token = jwtService.generateToken(user);
+
+        // Assert
+        assertNotNull(token);
+        assertTrue(token.length() > 0);
     }
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
+    @Test
+    void testGenerateRefreshToken() {
+        // Arrange
+        User user = mock(User.class);
+        when(user.getUsername()).thenReturn("testUser");
+        when(user.getRole()).thenReturn(Role.USER);
+
+        // Act
+        String refreshToken = jwtService.generateRefreshToken(user);
+
+        // Assert
+        assertNotNull(refreshToken);
+        assertTrue(refreshToken.length() > 0);
     }
 
-    public String generateToken(User userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+    @Test
+    void testIsTokenValid() {
+        // Arrange
+        User user = mock(User.class);
+        when(user.getUsername()).thenReturn("testUser");
+        when(user.getRole()).thenReturn(Role.USER);
+
+        String token = jwtService.generateToken(user);
+
+        UserDetails userDetails = mock(UserDetails.class);
+        when(userDetails.getUsername()).thenReturn("testUser");
+
+        // Act
+        boolean isValid = jwtService.isTokenValid(token, userDetails);
+
+        // Assert
+        assertTrue(isValid);
     }
 
-    public String generateToken(
-            Map<String, Object> extraClaims,
-            User userDetails
-    ) {
-        return buildToken(extraClaims, userDetails, jwtExpiration);
-    }
+    @Test
+    void testIsTokenInvalid() {
+        // Arrange
+        User user = mock(User.class);
+        when(user.getUsername()).thenReturn("testUser");
+        when(user.getRole()).thenReturn(Role.USER);
 
-    public String generateRefreshToken(
-            User userDetails
-    ) {
-        return buildToken(new HashMap<>(), userDetails, refreshExpiration);
-    }
+        String token = jwtService.generateToken(user);
 
-    private String buildToken(
-            Map<String, Object> extraClaims,
-            User userDetails,
-            long expiration
-    ) {
-        extraClaims.put("role", userDetails.getRole().toString());
+        UserDetails userDetails = mock(UserDetails.class);
+        when(userDetails.getUsername()).thenReturn("otherUser");
 
-        return Jwts
-                .builder()
-                .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
-                .compact();
-    }
+        // Act
+        boolean isValid = jwtService.isTokenValid(token, userDetails);
 
-    public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
-    }
-
-    private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
-    }
-
-    private Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
-    }
-
-    private Claims extractAllClaims(String token) {
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(getSignInKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-    }
-
-    private Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        return Keys.hmacShaKeyFor(keyBytes);
+        // Assert
+        assertFalse(isValid);
     }
 }

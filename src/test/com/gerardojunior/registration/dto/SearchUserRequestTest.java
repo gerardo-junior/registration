@@ -30,10 +30,7 @@ class SearchUserRequestTest {
 
         // Act
         Specification<User> specification = searchUserRequest.toSpecification();
-        Specification<User> composedSpecification = specification.and((root1, criteriaQuery1, criteriaBuilder1) -> null);
-
-        // Call toSpecification() method
-        Specification<User> result = composedSpecification.toSpecification();
+        Specification<User> result = specification.and((root1, criteriaQuery1, criteriaBuilder1) -> null);
 
         // Call the toPredicate method of Specification
         Predicate predicate = result.toPredicate(root, criteriaQuery, criteriaBuilder);
@@ -54,10 +51,7 @@ class SearchUserRequestTest {
 
         // Act
         Specification<User> specification = searchUserRequest.toSpecification();
-        Specification<User> composedSpecification = specification.and((root1, criteriaQuery1, criteriaBuilder1) -> null);
-
-        // Call toSpecification() method
-        Specification<User> result = composedSpecification.toSpecification();
+        Specification<User> result = specification.and((root1, criteriaQuery1, criteriaBuilder1) -> null);
 
         // Call the toPredicate method of Specification
         Predicate predicate = result.toPredicate(root, criteriaQuery, criteriaBuilder);
