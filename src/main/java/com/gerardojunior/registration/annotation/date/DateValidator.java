@@ -45,9 +45,7 @@ public class DateValidator implements ConstraintValidator<Date, Object> {
         if (this.minYearsAgo > 0 || this.maxYearsAgo > 0) {
             long diffOfNow = ChronoUnit.YEARS.between(date, LocalDate.now());
 
-            if (this.minYearsAgo < diffOfNow && this.maxYearsAgo >= diffOfNow) {
-                return false;
-            }
+            return this.minYearsAgo >= diffOfNow || this.maxYearsAgo < diffOfNow;
         }
 
         return true;

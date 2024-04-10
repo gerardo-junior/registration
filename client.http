@@ -1,0 +1,56 @@
+### Register new user
+POST /api/v1/user HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+  "firstname": "Gerardo",
+  "lastname": "asdad",
+  "dateOfBirth": "2021-04-01",
+  "document": "89016061002",
+  "email": "me@gerardo-junior.csom",
+  "password": "12xablaU@",
+  "address": "R. sei la onde, 69   sdsdasd sd asdasdasd s dasdasdasd",
+  "mobileNumber": "1197677274",
+  "gender": "MALE1"
+}
+
+### Login
+POST /api/v1/auth/login HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+  "email": "me@gerardo-junior.csom",
+  "password": "12xablaU@"
+}
+
+### Search user
+GET /api/v1/user HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsInN1YiI6IjFAMjIzMTIzMTIzMTIzMXNkYXNkYXNkYXNkYXNkYXNkYXNkLWp1bmlvci5jc29tIiwiaWF0IjoxNzEyNzAyMzE3LCJleHAiOjE3MTI3ODg3MTd9.AM36kEnxvxGC_aiYwauDZpAxayQ6gS5A0vro-S2AOwY
+
+{
+"fullName": "Gerardo"
+}
+
+### Get user
+GET /api/v1/user/89016061002 HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsInN1YiI6IjFAMjIzMTIzMTIzMTIzMXNkYXNkYXNkYXNkYXNkYXNkYXNkLWp1bmlvci5jc29tIiwiaWF0IjoxNzAwNTk4OTkwLCJleHAiOjE3MDA2ODUzOTB9.UoSSeG7WUgws027bDuFuAHZ1eo-vOJTLURCJ9h2gEX0
+
+### Update user
+PUT /api/v1/user/89016061002 HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsInN1YiI6IjFAMjIzMTIzMTIzMTIzMXNkYXNkYXNkYXNkYXNkYXNkYXNkLWp1bmlvci5jc29tIiwiaWF0IjoxNzAwNTk4OTkwLCJleHAiOjE3MDA2ODUzOTB9.UoSSeG7WUgws027bDuFuAHZ1eo-vOJTLURCJ9h2gEX0
+
+{
+  "firstname": "ze 2",
+  "lastname": "da silva",
+  "password": "xabl!A2",
+  "address": "R. sei la onde, 69",
+  "mobileNumber": "2197677274",
+  "gender": "MALE"
+}
