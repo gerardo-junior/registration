@@ -17,6 +17,7 @@ public class DateValidator implements ConstraintValidator<Date, Object> {
 
     @Override
     public void initialize(Date date) {
+
         ConstraintValidator.super.initialize(date);
         this.regex = date.regex();
         this.minYearsAgo = Integer.valueOf(date.minYearsAgo());

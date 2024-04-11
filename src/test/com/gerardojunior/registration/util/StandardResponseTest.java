@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class StandardResponseTest {
 
@@ -27,7 +26,7 @@ class StandardResponseTest {
         assertEquals(code, standardResponse.getMeta().getCode());
         assertEquals(message, standardResponse.getMeta().getMessage());
         assertEquals(data, standardResponse.getData());
-        assertEquals(null, standardResponse.getMeta().getPageable());
+        assertNull(standardResponse.getMeta().getPageable());
     }
 
     @Test

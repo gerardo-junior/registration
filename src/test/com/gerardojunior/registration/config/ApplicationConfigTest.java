@@ -1,6 +1,5 @@
 package com.gerardojunior.registration.config;
 
-import com.gerardojunior.registration.config.ApplicationConfig;
 import com.gerardojunior.registration.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -32,12 +31,12 @@ class ApplicationConfigTest {
         when(repository.findByEmail("existingUser")).thenReturn(/* mock your user here */);
 
         ApplicationConfig config = new ApplicationConfig(repository);
-        assertTrue(config.authenticationProvider() instanceof AuthenticationProvider);
+        assertInstanceOf(AuthenticationProvider.class, config.authenticationProvider());
     }
 
     @Test
     void testPasswordEncoder() {
         ApplicationConfig config = new ApplicationConfig(/* mock your UserRepository here */);
-        assertTrue(config.passwordEncoder() instanceof BCryptPasswordEncoder);
+        assertInstanceOf(BCryptPasswordEncoder.class, config.passwordEncoder());
     }
 }

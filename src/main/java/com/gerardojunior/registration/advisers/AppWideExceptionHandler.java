@@ -19,6 +19,7 @@ import java.util.Objects;
 @RestControllerAdvice
 @CrossOrigin
 public class AppWideExceptionHandler {
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity handleException(Exception e) {
         return new ResponseEntity(new StandardResponse("InternalError", e.getMessage(), null), HttpStatus.INTERNAL_SERVER_ERROR);
