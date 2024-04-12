@@ -57,8 +57,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public void saveUserToken(User user, String jwtToken) {
         Token token = Token.builder()
                            .user(user)
-                           .token(jwtToken)
-                           .tokenType(TokenType.BEARER)
+                           .value(jwtToken)
+                           .type(TokenType.BEARER)
                            .expired(false)
                            .revoked(false)
                            .build();

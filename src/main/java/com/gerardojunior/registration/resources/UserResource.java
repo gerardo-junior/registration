@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Pageable;
 
@@ -25,9 +24,10 @@ public class UserResource {
     private final UserService service;
 
     @GetMapping
-    public ResponseEntity<StandardResponse> list(@RequestBody @Valid SearchUserRequest request, @PageableDefault Pageable pageable) {
+    @ResponseStatus(HttpStatus.OK)
+    public StandardResponse list(@RequestBody @Valid SearchUserRequest request, @PageableDefault Pageable pageable) {
         Page<UserResponse> users = service.search(request, pageable);
-        return new ResponseEntity<>(new StandardResponse("UserListed", "User Listed successfully", users.getContent(), users.getPageable()), HttpStatus.OK);
+        return new StandardResponse("UserListed", "User Listed successfully", users.getContent(), users.getPageable());
     }
 
     @PostMapping

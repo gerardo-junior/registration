@@ -14,9 +14,4 @@ public class ValidateException extends RuntimeException {
         this.body = null;
     }
 
-    public ValidateException(String code, String message, Object body) {
-        super(message);
-        this.code = code;
-        this.body = body;
-    }
 }

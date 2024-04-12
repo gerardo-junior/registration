@@ -48,4 +48,5 @@ public class UserResponse {
     public String getDateOfBirth() {
         return this.dateOfBirth.format(DateTimeFormatter.ISO_DATE);
     }
+
 }

@@ -13,20 +13,21 @@ import java.time.LocalDate;
 @Data
 public class BaseEntity implements Serializable {
 
-    @Column(name = "Status", nullable = false, columnDefinition = "boolean default true")
+    @Column(nullable = false, columnDefinition = "boolean default true")
     private boolean status;
 
-    @Column(name = "CreatedBy", nullable = false)
+    @Column(nullable = false)
     private String createdBy;
 
     @CreationTimestamp
-    @Column(name = "CreatedDate", nullable = false)
+    @Column(nullable = false)
     private LocalDate createdDate;
 
-    @Column(name = "UpdatedBy", nullable = true)
+    @Column(nullable = true)
     private String updatedBy;
 
     @UpdateTimestamp
-    @Column(name = "UpdatedDate", nullable = true)
+    @Column(nullable = true)
     private LocalDate updatedDate;
+
 }
