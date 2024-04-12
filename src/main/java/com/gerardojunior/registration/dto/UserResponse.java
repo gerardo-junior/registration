@@ -1,5 +1,6 @@
 package com.gerardojunior.registration.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gerardojunior.registration.enums.Gender;
 import com.gerardojunior.registration.enums.Role;
@@ -10,7 +11,10 @@ import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserResponse {
+
+    private String id;
 
     private String document;
 

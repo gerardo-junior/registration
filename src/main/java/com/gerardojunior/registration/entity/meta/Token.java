@@ -2,33 +2,35 @@ package com.gerardojunior.registration.entity.meta;
 
 import com.gerardojunior.registration.enums.TokenType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Getter
+@Setter
 public class Token {
 
     @Id
     @GeneratedValue
-    public Integer id;
+    private Integer id;
 
     @Column(unique = true)
-    public String token;
+    private String value;
 
+    @Column
     @Enumerated(EnumType.STRING)
-    public TokenType tokenType = TokenType.BEARER;
+    private TokenType type = TokenType.BEARER;
 
-    public boolean revoked;
+    @Column
+    private boolean revoked;
 
-    public boolean expired;
+    @Column
+    private boolean expired;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    public User user;
+    private User user;
 }

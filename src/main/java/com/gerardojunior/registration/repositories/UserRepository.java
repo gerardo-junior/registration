@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface UserRepository extends ListCrudRepository<User, String>, JpaSpecificationExecutor<User> {
 
-    Optional<User> findByEmail(String email);
+    Optional<User> findByEmail(Object email);
 
     Integer countByEmailOrDocument(String email, String document);
 

@@ -38,7 +38,7 @@ public class RegisterUserRequest {
     private String email;
 
     @NotBlank
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{4,}$",
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{4,}$",
              message = "password must be min 4 length containing atleast 1 uppercase, 1 lowercase, 1 special character and 1 digit")
     private String password;
 

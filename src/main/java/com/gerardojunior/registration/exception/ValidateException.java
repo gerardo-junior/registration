@@ -5,16 +5,13 @@ import lombok.Getter;
 @Getter
 public class ValidateException extends RuntimeException {
 
-    private String code;
-    private Object body;
-
-    public ValidateException(String message) {
-        super(message);
-    }
+    private final String code;
+    private final transient Object body;
 
     public ValidateException(String code, String message) {
         super(message);
         this.code = code;
+        this.body = null;
     }
 
     public ValidateException(String code, String message, Object body) {

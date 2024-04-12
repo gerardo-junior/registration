@@ -13,7 +13,13 @@ public class CPFValidator implements ConstraintValidator<CPF, String> {
             return false;
         }
 
-        int d1, d2, digit1, digit2, mod, digitCPF;
+        int d1;
+        int d2;
+        int digit1;
+        int digit2;
+        int mod;
+        int digitCPF;
+
         d1 = d2 = 0;
 
         for (int i = 1; i < cpf.length() - 1; i++) {

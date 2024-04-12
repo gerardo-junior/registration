@@ -31,19 +31,22 @@ public class UserResource {
     }
 
     @PostMapping
-    public ResponseEntity<StandardResponse> create(@RequestBody @Valid RegisterUserRequest request) {
-        return new ResponseEntity<>(new StandardResponse("UserCreated", "User created successfully", service.register(request)), HttpStatus.CREATED);
+    @ResponseStatus(HttpStatus.CREATED)
+    public StandardResponse create(@RequestBody @Valid RegisterUserRequest request) {
+        return new StandardResponse("UserCreated", "User created successfully", service.register(request));
     }
 
     @GetMapping("/{document}")
-    public ResponseEntity<StandardResponse> details(@PathVariable String document) {
-        return new ResponseEntity<>(new StandardResponse("UserFound", "User found successfully", service.find(document)), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public StandardResponse details(@PathVariable String document) {
+        return new StandardResponse("UserFound", "User found successfully", service.find(document));
     }
 
     @PutMapping("/{document}")
-    public ResponseEntity<StandardResponse> update(@PathVariable String document,
+    @ResponseStatus(HttpStatus.OK)
+    public StandardResponse update(@PathVariable String document,
                                  @RequestBody @Valid UpdateUserRequest request) {
-        return new ResponseEntity<>(new StandardResponse("UserUpdated", "User updated successfully", service.update(document, request)), HttpStatus.OK);
+        return new StandardResponse("UserUpdated", "User updated successfully", service.update(document, request));
     }
 
 }

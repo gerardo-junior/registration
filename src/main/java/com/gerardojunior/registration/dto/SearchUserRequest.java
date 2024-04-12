@@ -35,8 +35,6 @@ public class SearchUserRequest {
             List<Predicate> predicates = new ArrayList<>();
 
             if (StringUtils.isNotEmpty(fullName)) {
-//                predicates.add(criteriaBuilder.like(criteriaBuilder.concat(root.get("firstname"), root.get("lastname")), fullName));
-
                 predicates.add(criteriaBuilder.like(criteriaBuilder.concat(criteriaBuilder.concat(root.get("firstname"), " ") , root.get("lastname")), fullName.toLowerCase()));
             }
 
