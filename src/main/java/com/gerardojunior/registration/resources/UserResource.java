@@ -42,10 +42,10 @@ public class UserResource {
         return new StandardResponse("UserFound", "User found successfully", service.find(document));
     }
 
-    @PutMapping("/{document}")
+    @PatchMapping("/{document}")
     @ResponseStatus(HttpStatus.OK)
     public StandardResponse update(@PathVariable String document,
-                                 @RequestBody @Valid UpdateUserRequest request) {
+                                   @RequestBody @Valid UpdateUserRequest request) {
         return new StandardResponse("UserUpdated", "User updated successfully", service.update(document, request));
     }
 

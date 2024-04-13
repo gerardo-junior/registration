@@ -11,6 +11,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public  interface IUserMapper {
+
     UserResponse map(User user);
 
     @Mapping(target = "password", ignore = true)

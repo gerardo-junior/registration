@@ -9,11 +9,14 @@ public class StandardResponse {
 
     private Meta meta;
 
-    private Object data;
+    private Object result;
+
+    private Object errors;
 
     @Data
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @AllArgsConstructor
-    public class Meta {
+    public static class Meta {
 
         private String code;
 
@@ -25,12 +28,12 @@ public class StandardResponse {
     }
 
     public StandardResponse(String code, String message, Object data) {
-        this.data = data;
+        this.result = data;
         this.meta = new Meta(code, message, null);
     }
 
     public StandardResponse(String code, String message, Object data, Pageable pageable) {
-        this.data = data;
+        this.result = data;
         this.meta = new Meta(code, message, pageable);
     }
 

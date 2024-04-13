@@ -1,6 +1,5 @@
 package com.gerardojunior.registration.services.impl;
 
-import com.gerardojunior.registration.config.JwtService;
 import com.gerardojunior.registration.dto.*;
 import com.gerardojunior.registration.entity.meta.User;
 import com.gerardojunior.registration.enums.Role;
@@ -8,7 +7,6 @@ import com.gerardojunior.registration.exception.NotFoundException;
 import com.gerardojunior.registration.exception.ValidateException;
 import com.gerardojunior.registration.mappers.IUserMapper;
 import com.gerardojunior.registration.repositories.UserRepository;
-import com.gerardojunior.registration.services.AuthenticationService;
 import com.gerardojunior.registration.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,10 +24,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository repository;
 
     private final PasswordEncoder passwordEncoder;
-
-    private final JwtService jwtService;
-
-    private final AuthenticationService authenticationService;
 
     private final IUserMapper mapper;
 
