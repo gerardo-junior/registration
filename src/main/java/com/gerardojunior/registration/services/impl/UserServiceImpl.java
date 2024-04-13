@@ -9,6 +9,7 @@ import com.gerardojunior.registration.mappers.IUserMapper;
 import com.gerardojunior.registration.repositories.UserRepository;
 import com.gerardojunior.registration.services.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Page;
 
 import java.util.Objects;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -29,6 +31,8 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public UserResponse register(RegisterUserRequest request) {
+
+        log.debug("Check if there is already a registered cpf or email");
         if (0 < repository.countByEmailOrDocument(request.getEmail(), request.getDocument())) {
             throw new ValidateException("UserAlreadyRegistered", "This user is already registered");
         }
@@ -38,13 +42,18 @@ public class UserServiceImpl implements UserService {
         user.setRole(Role.USER);
 
         user = repository.save(user);
+        log.debug("New user ({}) saved on database", user.getId());
 
         return mapper.map(user);
     }
 
     @Transactional
     public UserResponse update(String document, UpdateUserRequest request) {
+        log.debug("Finding user on database");
+
         User user = repository.findByDocument(document).orElseThrow(() -> new NotFoundException("UserNotFound", "User not found"));
+
+        log.debug("Merging only non null fields");
         mapper.merge(request, user);
 
         if (Objects.nonNull(request.getPassword()) && !request.getPassword().isEmpty()) {
