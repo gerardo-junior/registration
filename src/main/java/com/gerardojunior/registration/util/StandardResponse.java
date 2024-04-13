@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.data.domain.Pageable;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class StandardResponse {
 
     private Meta meta;
@@ -22,7 +23,6 @@ public class StandardResponse {
 
         private String message;
 
-        @JsonInclude(JsonInclude.Include.NON_NULL)
         private Pageable pageable;
 
     }
