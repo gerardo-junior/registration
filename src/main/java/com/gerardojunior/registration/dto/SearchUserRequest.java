@@ -26,10 +26,6 @@ public class SearchUserRequest {
 
     private String email;
 
-    private String address;
-
-    private String mobileNumber;
-
     private String createdAt;
 
     public Specification<User> toSpecification() {
