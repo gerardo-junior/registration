@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
@@ -25,28 +27,28 @@ public class UserResource {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public StandardResponse list(@RequestBody @Valid SearchUserRequest request, @PageableDefault Pageable pageable) {
-        Page<UserResponse> users = service.search(request, pageable);
-        return new StandardResponse("UserListed", "User Listed successfully", users.getContent(), users.getPageable());
+    public StandardResponse<List<UserResponse>> list(@RequestBody @Valid SearchUserRequest request, @PageableDefault Pageable pageable) {
+        Page<UserResponse> users = service.findAll(request, pageable);
+        return new StandardResponse<>("UserListed", "User Listed successfully", users.getContent(), users.getPageable());
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public StandardResponse create(@RequestBody @Valid RegisterUserRequest request) {
-        return new StandardResponse("UserCreated", "User created successfully", service.register(request));
+    public StandardResponse<UserResponse> create(@RequestBody @Valid RegisterUserRequest request) {
+        return new StandardResponse<>("UserCreated", "User created successfully", service.register(request));
     }
 
     @GetMapping("/{document}")
     @ResponseStatus(HttpStatus.OK)
-    public StandardResponse details(@PathVariable String document) {
-        return new StandardResponse("UserFound", "User found successfully", service.find(document));
+    public StandardResponse<UserResponse> details(@PathVariable String document) {
+        return new StandardResponse<>("UserFound", "User found successfully", service.find(document));
     }
 
     @PatchMapping("/{document}")
     @ResponseStatus(HttpStatus.OK)
-    public StandardResponse update(@PathVariable String document,
+    public StandardResponse<UserResponse> update(@PathVariable String document,
                                    @RequestBody @Valid UpdateUserRequest request) {
-        return new StandardResponse("UserUpdated", "User updated successfully", service.update(document, request));
+        return new StandardResponse<>("UserUpdated", "User updated successfully", service.update(document, request));
     }
 
 }

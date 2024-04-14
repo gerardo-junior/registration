@@ -1,5 +1,6 @@
 package com.gerardojunior.registration.config;
 
+import com.gerardojunior.registration.entity.meta.Token;
 import com.gerardojunior.registration.repositories.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,7 +26,7 @@ public class LogoutService implements LogoutHandler {
         }
 
         jwt = authHeader.substring(7);
-        var storedToken = tokenRepository.findByValue(jwt)
+        Token storedToken = tokenRepository.findByValue(jwt)
                                          .orElse(null);
         if (storedToken != null) {
             storedToken.setExpired(true);

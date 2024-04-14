@@ -14,6 +14,7 @@ import com.gerardojunior.registration.services.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -33,15 +35,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
+        log.debug("Authenticate user");
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
         User user = repository.findByEmail(request.getEmail())
                               .orElseThrow(() -> new NotFoundException("UserNotFound", "User not found"));
+
 
         String jwtToken = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
@@ -55,6 +54,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     public void saveUserToken(User user, String jwtToken) {
+        log.debug("Saving token of user");
         Token token = Token.builder()
                            .user(user)
                            .value(jwtToken)

@@ -1,6 +1,7 @@
 package com.gerardojunior.registration.resources;
 
 import com.gerardojunior.registration.dto.AuthenticationRequest;
+import com.gerardojunior.registration.dto.AuthenticationResponse;
 import com.gerardojunior.registration.services.AuthenticationService;
 import com.gerardojunior.registration.util.StandardResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,11 +23,12 @@ public class AuthenticationResource {
 
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public StandardResponse authenticate(@RequestBody AuthenticationRequest request) {
-        return new StandardResponse("AuthSuccessfully", "Authentication completed successfully", service.authenticate(request));
+    public StandardResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
+        return new StandardResponse<>("AuthSuccessfully", "Authentication completed successfully", service.authenticate(request));
     }
 
     @PostMapping("/refresh-token")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         service.refreshToken(request, response);
     }

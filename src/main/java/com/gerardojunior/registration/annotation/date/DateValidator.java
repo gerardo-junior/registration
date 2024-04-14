@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
-public class DateValidator implements ConstraintValidator<Date, Object> {
+public class DateValidator implements ConstraintValidator<Date, String> {
 
     private String regex;
 
@@ -26,19 +26,15 @@ public class DateValidator implements ConstraintValidator<Date, Object> {
     }
 
     @Override
-    public boolean isValid(Object input, ConstraintValidatorContext context) {
-        if (Objects.isNull(input) || !(input instanceof String value)) {
-            return false;
-        }
-
-        if (!value.matches(this.regex)) {
+    public boolean isValid(String input, ConstraintValidatorContext context) {
+        if (Objects.isNull(input) || !input.matches(this.regex)) {
             return false;
         }
 
         LocalDate date;
 
         try {
-            date = LocalDate.parse(value);
+            date = LocalDate.parse(input);
         } catch (Exception e) {
             return false;
         }

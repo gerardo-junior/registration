@@ -11,5 +11,5 @@ public interface UserService {
 
     UserResponse update(String document, UpdateUserRequest request);
 
-    Page<UserResponse> search(SearchUserRequest searchUserRequest, Pageable pageable);
+    Page<UserResponse> findAll(SearchUserRequest searchUserRequest, Pageable pageable);
 }

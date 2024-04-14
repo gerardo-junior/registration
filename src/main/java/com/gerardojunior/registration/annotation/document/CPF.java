@@ -11,6 +11,8 @@ import jakarta.validation.Payload;
 @Documented
 public @interface CPF {
 
+    String regex() default "^(?!([\\d])\\1{10})[\\d]{11}$";
+
     String message() default "the field must contain a valid brazilian document";
 
     Class<?>[] groups() default {};

@@ -37,15 +37,13 @@ public class  OpenAPIConfig {
         contact.setName("Gerardo Junior");
         contact.setUrl("https://gerardo-junior.com");
 
-        License mitLicense = new License().name("MIT License").url("https://choosealicense.com/licenses/mit/");
-
-        Info info = new Info()
-                .title("Demo Service API")
-                .version("1.0")
-                .contact(contact)
-                .description("This API exposes endpoints to manage demo.")
-                .termsOfService("https://gerardo-junior.com")
-                .license(mitLicense);
+        Info info = new Info().title("Demo Service API")
+                              .version("1.0")
+                              .contact(contact)
+                              .description("This API exposes endpoints to manage demo.")
+                              .termsOfService("https://gerardo-junior.com")
+                              .license(new License().name("MIT License")
+                                                    .url("https://choosealicense.com/licenses/mit/"));
 
         return new OpenAPI().info(info).servers(List.of(devServer, prodServer));
     }

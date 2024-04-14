@@ -67,13 +67,14 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(readOnly = true)
     public UserResponse find(String document) {
+        log.debug("Find user by document");
         User user = repository.findByDocument(document).orElseThrow(() -> new NotFoundException("UserNotFound", "User not found"));
         return mapper.map(user);
     }
 
-
     @Transactional(readOnly = true)
-    public Page<UserResponse> search(SearchUserRequest searchUserRequest, Pageable pageable) {
+    public Page<UserResponse> findAll(SearchUserRequest searchUserRequest, Pageable pageable) {
+        log.debug("Listing users and search");
         return repository.findAll(searchUserRequest.toSpecification(), pageable).map(mapper::map);
     }
 

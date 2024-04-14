@@ -19,8 +19,10 @@ public @interface Date {
     String maxYearsAgo() default "0";
 
     String message() default "the field must contain a valid date";
+
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
+
 }
 

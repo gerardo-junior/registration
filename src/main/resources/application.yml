@@ -23,4 +23,4 @@ server:
 bezkoder:
   openapi:
     dev-url: http://localhost:8088
-    prod-url: https://localhost:8080t
+    prod-url: https://localhost:8080
