@@ -1,4 +1,4 @@
-package com.gerardojunior.registration.services.impl;
+package com.gerardojunior.registration.impl;
 
 import com.gerardojunior.registration.dto.RegisterUserRequest;
 import com.gerardojunior.registration.dto.SearchUserRequest;
@@ -8,6 +8,7 @@ import com.gerardojunior.registration.entity.meta.User;
 import com.gerardojunior.registration.mappers.IUserMapper;
 import com.gerardojunior.registration.repositories.UserRepository;
 import com.gerardojunior.registration.helpers.RegisterUserRequestHelper;
+import com.gerardojunior.registration.services.impl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

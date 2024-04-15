@@ -1,4 +1,4 @@
-package com.gerardojunior.registration.services.impl;
+package com.gerardojunior.registration.impl;
 
 import com.gerardojunior.registration.config.JwtService;
 import com.gerardojunior.registration.dto.AuthenticationRequest;
@@ -9,6 +9,7 @@ import com.gerardojunior.registration.helpers.RegisterUserRequestHelper;
 import com.gerardojunior.registration.helpers.TokenHelper;
 import com.gerardojunior.registration.repositories.TokenRepository;
 import com.gerardojunior.registration.repositories.UserRepository;
+import com.gerardojunior.registration.services.impl.AuthenticationServiceImpl;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,7 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
