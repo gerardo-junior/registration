@@ -165,6 +165,12 @@ curl --location --request PUT 'http://localhost:8080/api/v1/users/89016061002' \
 
 para mais informações basta acessar o swagger do projeto: [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
 
+para rodar testes basta rodar
+
+```bash
+./mvnw test # ou equivalente na tua ide favorita
+```
+
 Contribuindo
 Se você quiser contribuir para este projeto, por favor, siga estas etapas:
 
