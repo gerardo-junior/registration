@@ -7,7 +7,7 @@ services:
     env_file:
       - .env.local
     environment:
-      - JAVA_OPTS_EXT=-Dspring.profiles.active="local"
+      - JAVA_OPTS_EXT="-Dspring.profiles.active=local"
     depends_on:
       - db
 
@@ -18,11 +18,11 @@ services:
     ports:
       - 3306
     volumes:
-      - dbdata:/var/lib/mysql
+      - dbregistration:/var/lib/mysql
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       timeout: 20s
       retries: 10
 
 volumes:
-  dbdata:
+  dbregistration:

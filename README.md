@@ -96,10 +96,12 @@ curl --location 'http://localhost:8080/api/v1/auth/login' \
 
 ```
 
+Recomendo adicionar o conteudo do campo `access_token` em uma varaivel `export TOKEN=<access_token>`
+
 Para pesquisar por algum usuário:
 
 ```bash
-curl --location --request GET 'http://localhost:8080/api/v1/user' \
+curl --location --request GET 'http://localhost:8080/api/v1/users' \
 --header 'Content-Type: application/json' \
 --header "Authorization: Bearer $TOKEN" \
 --data '{
@@ -122,7 +124,7 @@ curl --location --request GET 'http://localhost:8080/api/v1/user' \
 Detalhes de usuários
 
 ```bash
-curl --location 'http://localhost:8080/api/v1/user/89016061002' \
+curl --location 'http://localhost:8080/api/v1/users/89016061002' \
 --header "Authorization: Bearer $TOKEN"
 
 # {
@@ -135,8 +137,10 @@ curl --location 'http://localhost:8080/api/v1/user/89016061002' \
 # 	}
 # }
 ```
+Update de usuario.
+
 ```bash
-curl --location --request PUT 'http://localhost:8080/api/v1/user/89016061002' \
+curl --location --request PUT 'http://localhost:8080/api/v1/users/89016061002' \
 --header 'Content-Type: application/json' \
 --header "Authorization: Bearer $TOKEN" \
 --data  '{
