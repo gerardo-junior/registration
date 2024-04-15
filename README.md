@@ -27,7 +27,7 @@ Executando o projeto com Docker Compose
 No diretório do projeto, execute o seguinte comando para criar e iniciar os contêineres:
 
 ```bash
-docker compose up -d
+docker compose up
 ```
 
 Aguarde até que os contêineres sejam iniciados e o aplicativo esteja pronto para uso.
