@@ -1,63 +1,56 @@
 package com.gerardojunior.registration.resources;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gerardojunior.registration.dto.AuthenticationRequest;
 import com.gerardojunior.registration.dto.AuthenticationResponse;
 import com.gerardojunior.registration.services.AuthenticationService;
+import com.gerardojunior.registration.util.StandardResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@ExtendWith(MockitoExtension.class)
 class AuthenticationResourceTest {
 
     @Mock
     private AuthenticationService authenticationService;
-
     @InjectMocks
     private AuthenticationResource authenticationResource;
 
-    private MockMvc mockMvc;
+    @Test
+    void testAuthenticate() {
+        AuthenticationRequest authenticationRequest = new AuthenticationRequest("test@example.com", "password");
+        AuthenticationResponse authenticationResponse = new AuthenticationResponse("access_token", "refresh_token");
+        when(authenticationService.authenticate(any(AuthenticationRequest.class))).thenReturn(authenticationResponse);
 
-    public AuthenticationResourceTest() {
-        MockitoAnnotations.openMocks(this);
-        this.mockMvc = MockMvcBuilders.standaloneSetup(authenticationResource).build();
+        StandardResponse<AuthenticationResponse> response = authenticationResource.authenticate(authenticationRequest);
+        assertEquals("AuthSuccessfully", response.getMeta().getCode());
+        assertEquals("Authentication completed successfully", response.getMeta().getMessage());
+        assertEquals("access_token", response.getData().getAccessToken());
+        assertEquals("refresh_token", response.getData().getRefreshToken());
     }
 
     @Test
-    void testAuthenticate() throws Exception {
-        AuthenticationRequest authenticationRequest = new AuthenticationRequest("test@example.com", "password");
-        AuthenticationResponse authenticationResponse = new AuthenticationResponse("access_token", "refresh_token");
-        when(authenticationService.authenticate(any())).thenReturn(authenticationResponse);
+    void testRefreshToken() throws IOException {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        doNothing().when(authenticationService).refreshToken(any(HttpServletRequest.class), any(HttpServletResponse.class));
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/auth/login")
-                        .content(asJsonString(authenticationRequest))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+        authenticationResource.refreshToken(request, response);
+        verify(authenticationService, times(1)).refreshToken(request, response);
     }
 
-
-    private String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 }
