@@ -13,4 +13,4 @@ COPY --from=builder /src/target/registration.jar /app/registration.jar
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "/app/registration.jar"]
+CMD ["java", "-jar", "/app/registration.jar", "$JAVA_OPTS_EXT"]
