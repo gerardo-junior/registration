@@ -1,9 +1,10 @@
-FROM  openjdk:17-alpine as builder
+FROM  openjdk:17-alpine AS builder
 
 WORKDIR /src
 COPY . /src
 
-RUN ./mvnw clean package -DskipTests
+RUN ./mvnw test && \
+    ./mvnw clean package
 
 FROM openjdk:17-alpine
 
